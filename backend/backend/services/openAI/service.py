@@ -30,6 +30,12 @@ def mapping_path(protocol):
 
 
 class OpenAIService:
+
+    """
+    Service that runs calls to OpenAI to generate the GraphQL
+    Printing output to the console for now to get visibility into what is being returned.
+    
+    """
     def __init__(self, use_prompt=0):
         openai.api_key = OPENAI_API_KEY
 
