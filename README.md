@@ -2,8 +2,6 @@
   <h1 align="center">ChainBrain</h1>
   <img src="images/chainbrainlogo.jpg" height="200">
   <h2 align="center">Unlock On-Chain Insights with AI-Driven Search.</h2>
-  <h2 align="center">Our submission for the ETH Denver Hackathon 2023:<br>
-  https://app.buidlbox.io/projects/chainbrain</h2>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
