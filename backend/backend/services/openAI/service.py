@@ -1,4 +1,5 @@
 import openai
+import requests
 
 from backend.config import OPENAI_API_KEY
 from backend.services.openAI.graph_prompt_factory import GraphPromptFactory
@@ -87,3 +88,22 @@ class OpenAIService:
         ]
         print("==========openai response (formatted):==========\n", openai_result)
         return openai_result
+
+    def request_solana_data(self, input_query, api_key):
+        # The GraphQL query
+        query = input_query
+
+        # A simple function to use requests.post to make the API call.
+        def run_query(query):  
+            headers = {'X-API-KEY': api_key}
+            request = requests.post('https://graphql.bitquery.io/',
+                                    json={'query': query}, headers=headers)
+            if request.status_code == 200:
+                return request.json()
+            else:
+                raise Exception('Query failed and return code is {}.      {}'.format(request.status_code,
+                            query))
+
+        result = run_query(query)  # Execute the query
+        print 'Result - {}'.format(result)
+        return result
