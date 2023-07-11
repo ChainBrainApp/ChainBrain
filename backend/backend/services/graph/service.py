@@ -1,8 +1,6 @@
 import datetime as dt
 import json
 import os
-
-import pandas as pd
 import requests
 
 from backend.config import THEGRAPH_API_KEY
@@ -50,6 +48,17 @@ def execute_query_thegraph(subgraph_id, query, hosted=True):
         print(r.json())
 
 
+def run_query(query):  # A simple function to use requests.post to make the API call.
+    headers = {'X-API-KEY': 'YOUR API KEY'}
+    request = requests.post('https://graphql.bitquery.io/',
+                            json={'query': query}, headers=headers)
+    if request.status_code == 200:
+        return request.json()
+    else:
+        raise Exception('Query failed and return code is {}.      {}'.format(request.status_code,
+                        query))
+
+
 class GraphService:
     def __init__(self, protocol=DEFAULT_PROTOCOL, chain=DEFAULT_CHAIN):
         self.build_subgraphs_json()
@@ -61,11 +70,14 @@ class GraphService:
         return data
 
     def query_thegraph(self, gql):
-        data = execute_query_thegraph(
-            self.subgraph.query_id,
-            gql,
-            hosted=(self.subgraph.service_type == "hosted-service"),
-        )
+        if self.subgraph.protocol == 'Solana Blockchain':
+            data = run_query(gql)
+        else:
+            data = execute_query_thegraph(
+                self.subgraph.query_id,
+                gql,
+                hosted=(self.subgraph.service_type == "hosted-service"),
+            )
 
         print("==========the graph response:==========\n", data)
         if data == None:
