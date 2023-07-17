@@ -1,4 +1,5 @@
 import openai
+import requests
 
 from backend.config import OPENAI_API_KEY
 from backend.services.openAI.graph_prompt_factory import GraphPromptFactory
@@ -41,21 +42,20 @@ class OpenAIService:
 
     def request_gql_for_graph_llama(self, input_query, subgraph):
         # import regex as re
-        graph_service = GraphService(protocol=subgraph)
-        schema = os.path.join(
-            os.getcwdb().decode("utf-8"), graph_service.subgraph.schema_file_location
-        )
-        mappings = mapping_path(graph_service.subgraph.deployments["base"])
-        # examples = os.getcwdb().decode("utf-8")+ "/backend/services/graph/graphql_examples.py"
-        # set recursive = True for case of uniswap etc where there are more sub directories
-        documents = SimpleDirectoryReader(
-            input_dir=mappings, input_files=[schema], recursive=True
-        ).load_data()
-        # print("documents", documents)
-        # save to disk
-        # index.save_to_disk('index.json')
-        # load from disk
-        # index = GPTSimpleVectorIndex.load_from_disk('index.json')
+        if subgraph == 'Solana Blockchain':
+            examples = os.getcwdb().decode("utf-8")+ "/backend/services/openAI/prompts/SolanaExamples.py"
+            documents = SimpleDirectoryReader(
+                input_dir=examples, input_files=[examples], recursive=True
+            ).load_data()
+        else:
+            graph_service = GraphService(protocol=subgraph)
+            schema = os.path.join(
+                os.getcwdb().decode("utf-8"), graph_service.subgraph.schema_file_location
+            )
+            mappings = mapping_path(graph_service.subgraph.deployments["base"])
+            documents = SimpleDirectoryReader(
+                input_dir=mappings, input_files=[schema], recursive=True
+            ).load_data()
 
         # define LLM
         print("==========openai training:==========")
