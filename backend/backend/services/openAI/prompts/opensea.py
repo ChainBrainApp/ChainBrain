@@ -46,5 +46,20 @@ EXAMPLES = [
         dailyTradedCollectionCount
         timestamp
       }
-    }""")
+    }"""),
+    Prompt(
+        q="What date were the most NFTs in the Degods NFT collection traded (collection id = '0xa45D808eAFDe8B8E6B6B078fd246e28AD13030E8')?",
+        o="""query {
+          collectionDailySnapshots(
+              where: {collection: "0xa45D808eAFDe8B8E6B6B078fd246e28AD13030E8"}
+              first: 1
+              orderBy: dailyTradeVolumeETH
+              orderDirection: desc
+          ) {
+              blockNumber
+              dailyTradeVolumeETH
+              timestamp
+          }
+        }""",
+    ),
 ]

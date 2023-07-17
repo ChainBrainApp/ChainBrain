@@ -1,9 +1,12 @@
 import datetime as dt
 import json
 import os
+import pandas as pd
 import requests
 
 from backend.config import THEGRAPH_API_KEY
+from backend.config import BITQUERY_API_KEY
+
 from backend.services.graph.subgraphs import SubgraphService
 
 
@@ -49,7 +52,7 @@ def execute_query_thegraph(subgraph_id, query, hosted=True):
 
 
 def run_query(query):  # A simple function to use requests.post to make the API call.
-    headers = {'X-API-KEY': 'YOUR API KEY'}
+    headers = {'X-API-KEY': BITQUERY_API_KEY}
     request = requests.post('https://graphql.bitquery.io/',
                             json={'query': query}, headers=headers)
     if request.status_code == 200:
@@ -63,14 +66,15 @@ class GraphService:
     def __init__(self, protocol=DEFAULT_PROTOCOL, chain=DEFAULT_CHAIN):
         self.build_subgraphs_json()
         self.subgraph = SubgraphService(protocol, chain)
-
+        print("in graph service")
     def ensure_enumerable(self, data):
         if not isinstance(data, list):
             return [data]
         return data
 
     def query_thegraph(self, gql):
-        if self.subgraph.protocol == 'Solana Blockchain':
+        if self.subgraph == 'solana-blockchain':
+            print("In solana subgraph")
             data = run_query(gql)
         else:
             data = execute_query_thegraph(
@@ -94,6 +98,7 @@ class GraphService:
         return data
 
     def build_subgraphs_json(self):
+        print("build subgraphs json")
         deployments = json.load(
             open(os.getcwdb().decode("utf-8") + "/subgraphs/deployment/deployment.json")
         )
