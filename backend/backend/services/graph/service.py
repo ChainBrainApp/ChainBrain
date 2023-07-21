@@ -33,7 +33,6 @@ CHAINS = [
 
 
 def execute_query_thegraph(subgraph_id, query, hosted=True):
-    print('subgraph_id', subgraph_id)
     namespace = "marissaposner" if subgraph_id == "sporkdao-token" else "messari"
     if hosted:
         base_url = f"https://api.thegraph.com/subgraphs/name/{namespace}/"
@@ -84,7 +83,7 @@ class GraphService:
 
     def build_subgraphs_json(self):
         deployments = json.load(
-            open(os.getcwdb().decode("utf-8") + "/backend/subgraphs/deployment/deployment.json")
+            open(os.getcwdb().decode("utf-8") + "/subgraphs/deployment/deployment.json")
         )
         li = []
         for protocol in deployments:
@@ -113,7 +112,7 @@ class GraphService:
             file=open(
                 os.path.join(
                     os.getcwdb().decode("utf-8"),
-                    "/services/graph/",
+                    "backend/services/graph/",
                     "subgraphs.json",
                 ),
                 "w",
