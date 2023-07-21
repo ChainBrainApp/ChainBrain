@@ -7,8 +7,7 @@ import requests
 
 from backend.config import THEGRAPH_API_KEY
 from backend.services.graph.subgraphs import SubgraphService
-
-
+from backend.services.graph import *
 DEFAULT_PROTOCOL = "aave-governance"
 DEFAULT_CHAIN = "ethereum"
 
@@ -31,9 +30,17 @@ CHAINS = [
     "moonriver",
 ]
 
+subgraph_id = 'ELUcwgpm14LKPLrBRuVvPvNKHQ9HvwmtKgKSH6123cr7'
+query = '''{
+  liquidityPools(first: 5, orderBy: cumulativeVolumeUSD, orderDirection: desc, where: {inputTokens_: {symbol: "USDC"}}) {
+    name
+    cumulativeVolumeUSD
+    totalValueLockedUSD
+  }
+}'''
+hosted = True
 
 def execute_query_thegraph(subgraph_id, query, hosted=True):
-    print('subgraph_id', subgraph_id)
     namespace = "marissaposner" if subgraph_id == "sporkdao-token" else "messari"
     if hosted:
         base_url = f"https://api.thegraph.com/subgraphs/name/{namespace}/"
@@ -83,9 +90,11 @@ class GraphService:
         return data
 
     def build_subgraphs_json(self):
+        print("in build subgraphs")
         deployments = json.load(
             open(os.getcwdb().decode("utf-8") + "/backend/subgraphs/deployment/deployment.json")
         )
+        print('after deployments in build subgraphs')
         li = []
         for protocol in deployments:
             for chain in CHAINS:
@@ -113,10 +122,25 @@ class GraphService:
             file=open(
                 os.path.join(
                     os.getcwdb().decode("utf-8"),
-                    "/services/graph/",
+                    "backend/backend/services/graph/",
                     "subgraphs.json",
                 ),
                 "w",
             ),
         )
         return df
+def QUERY_API_RESPONSE_FORMATTER(id, gql, output):
+    return {"id": id, "gql": gql, "output": output}
+
+
+gql = execute_query_thegraph(subgraph_id, query, hosted=True)
+print(gql)
+graph_service = GraphService(protocol=subgraph_id)
+print('after graph service')
+try:
+    result = graph_service.query_thegraph(gql)
+except ValueError:
+    # import pdb;pdb.set_trace()
+    QUERY_API_RESPONSE_FORMATTER("-1", gql, [])
+
+

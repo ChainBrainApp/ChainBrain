@@ -28,7 +28,7 @@ class SubgraphService:
             self.mappers = f"subgraphs_custom/{protocol}/src/sporkdao.ts"
             return
         self.deployments = json.load(
-            open(os.getcwdb().decode("utf-8") + "/subgraphs/deployment/deployment.json")
+            open(os.getcwdb().decode("utf-8") + "/backend/subgraphs/deployment/deployment.json")
         )[protocol]
         try:
             # see if deployed on given chain
