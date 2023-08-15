@@ -85,7 +85,7 @@ class GraphService:
         os.chdir('..')
 
         deployments = json.load(
-            open(os.getcwdb().decode("utf-8") + "/subgraphs/deployment/deployment.json")
+            open(os.getcwdb().decode("utf-8") + "/backend/subgraphs/deployment/deployment.json")
         )
         li = []
         for protocol in deployments:
