@@ -82,6 +82,8 @@ class GraphService:
         return data
 
     def build_subgraphs_json(self):
+        os.chdir('..')
+
         deployments = json.load(
             open(os.getcwdb().decode("utf-8") + "/subgraphs/deployment/deployment.json")
         )
@@ -112,10 +114,11 @@ class GraphService:
             file=open(
                 os.path.join(
                     os.getcwdb().decode("utf-8"),
-                    "backend/services/graph/",
+                    "/backend/services/graph/",
                     "subgraphs.json",
                 ),
                 "w",
             ),
         )
         return df
+
